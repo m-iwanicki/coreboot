@@ -296,7 +296,8 @@ typedef struct {
 	uint32_t  tls		: 1;
 	uint32_t  reserved_4		: 1;
 	uint32_t  wlan		: 1;
-	uint32_t  reserved_5		: 8;
+	uint32_t  reserved_5		: 4;
+	uint32_t  ptt		: 1;
 } __attribute__((packed)) mefwcaps_sku;
 
 typedef struct {

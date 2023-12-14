@@ -466,6 +466,7 @@ int mkhi_get_fwcaps(void)
 	print_cap("Virtual LAN (VLAN)                        ", fwcaps.cap.caps_sku.vlan);
 	print_cap("TLS                                       ", fwcaps.cap.caps_sku.tls);
 	print_cap("Wireless LAN (WLAN)                       ", fwcaps.cap.caps_sku.wlan);
+	print_cap("Platform Trust Technology (PTT)           ", fwcaps.cap.caps_sku.ptt);
 
 	return 0;
 }
