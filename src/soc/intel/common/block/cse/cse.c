@@ -40,6 +40,8 @@
 #define HECI_CIP_TIMEOUT_US	1000
 /* Wait up to 5 seconds for CSE to boot from RO(BP1) */
 #define CSE_DELAY_BOOT_TO_RO_MS	(5 * 1000)
+/* Wait up to 5 seconds for CSE to finish FW init */
+#define CSE_DELAY_FW_INIT_COMPLETE	(5 * 1000)
 
 #define SLOT_SIZE		sizeof(uint32_t)
 
@@ -348,6 +350,25 @@ uint8_t cse_wait_com_soft_temp_disable(void)
 		}
 	}
 	printk(BIOS_SPEW, "HECI: CSE took %lld ms to boot from RO\n",
+			stopwatch_duration_msecs(&sw));
+	return 1;
+}
+
+/*
+ * Wait up to 5 seconds for ME to set FW Init Complete
+ */
+static uint8_t cse_wait_fw_init_complete(void)
+{
+	struct stopwatch sw;
+	stopwatch_init_msecs_expire(&sw, CSE_DELAY_FW_INIT_COMPLETE);
+	while (!cse_is_hfs1_fw_init_complete()) {
+		udelay(HECI_DELAY_US);
+		if (stopwatch_expired(&sw)) {
+			printk(BIOS_ERR, "HECI: Timed out waiting for CSE to init FW!\n");
+			return 0;
+		}
+	}
+	printk(BIOS_SPEW, "HECI: CSE took %lld ms to init FW\n",
 			stopwatch_duration_msecs(&sw));
 	return 1;
 }
@@ -1171,7 +1192,7 @@ void cse_enable_ptt(bool state)
 	 * 5) Before EOP issued to CSE
 	 */
 	if (!cse_is_hfs1_cws_normal() || !cse_is_hfs1_com_normal() ||
-	    !cse_is_hfs1_fw_init_complete() || !ENV_RAMSTAGE) {
+		!cse_wait_fw_init_complete() || !ENV_RAMSTAGE) {
 		printk(BIOS_ERR, "HECI: Unmet prerequisites for"
 				 "FW FEATURE SHIPMENT TIME STATE OVERRIDE\n");
 		return;
