@@ -1,0 +1,8 @@
+
+chip soc/intel/skylake
+	device domain 0 on
+		chip drivers/crb
+		 	device mmio 0xfed40000 on end
+		end
+	end
+end

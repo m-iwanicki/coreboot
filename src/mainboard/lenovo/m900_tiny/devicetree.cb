@@ -227,9 +227,6 @@ chip soc/intel/skylake
 				end
 				device pnp 2e.f off end		# Function register
 			end
-			chip drivers/pc80/tpm
-				device pnp 0c31.0 on end
-			end
 		end
 		device ref p2sb on end
 		device ref pmc on end

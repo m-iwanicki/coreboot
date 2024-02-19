@@ -13,13 +13,32 @@ config BOARD_SPECIFIC_OPTIONS
 	select INTEL_GMA_HAVE_VBT
 	select INTEL_INT15
 	select MAINBOARD_HAS_LIBGFXINIT
-	select MAINBOARD_HAS_TPM1
 	select MAINBOARD_USES_IFD_GBE_REGION
-	select MEMORY_MAPPED_TPM
 	select SKYLAKE_SOC_PCH_H
 	select SOC_INTEL_COMMON_BLOCK_HDA_VERB
 	select SOC_INTEL_KABYLAKE
 	select SUPERIO_NUVOTON_NCT6687D
+
+choice PLATFORM_TPM_CHOICE
+	prompt "Preferred TPM type"
+	default USE_DTPM
+
+config USE_DTPM
+	bool "Discrete TPM 1.2"
+	select MAINBOARD_HAS_TPM1
+	select MEMORY_MAPPED_TPM
+
+config USE_PTT
+	bool "Intel Platform Trust Technology"
+	select MAINBOARD_HAS_TPM2
+	select CRB_TPM
+	select HAVE_INTEL_PTT
+
+endchoice
+
+config OVERRIDE_DEVICETREE
+	default "ptt.cb" if USE_PTT
+	default "dtpm.cb"
 
 config UART_FOR_CONSOLE
 	int

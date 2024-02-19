@@ -4,8 +4,10 @@
 #include <device/device.h>
 #include <drivers/intel/gma/int15.h>
 #include <gpio.h>
+#include <intelblocks/cse.h>
 #include <mainboard/gpio.h>
 #include <soc/gpio.h>
+#include <soc/me.h>
 #include <soc/ramstage.h>
 
 static void print_board_id(void)
@@ -47,6 +49,12 @@ static void mainboard_enable(struct device *dev)
 {
 	mainboard_configure_gpios();
 	print_board_id();
+}
+
+void mainboard_silicon_init_params(FSP_S_CONFIG *supd)
+{
+	intel_me_status();
+	cse_enable_ptt(CONFIG(USE_PTT));
 }
 
 struct chip_operations mainboard_ops = {
