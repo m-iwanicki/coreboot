@@ -1,22 +1,37 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
 #include <bootblock_common.h>
+#include <console/console.h>
 #include <device/pnp_ops.h>
+#include <intelblocks/rtc.h>
 #include <mainboard/gpio.h>
 #include <soc/gpio.h>
 #include <superio/nuvoton/common/nuvoton.h>
 #include <superio/nuvoton/nct6687d/nct6687d.h>
+#include <reset.h>
 
 #define SERIAL_DEV PNP_DEV(0x2e, NCT6687D_SP1)
 #define POWER_DEV  PNP_DEV(0x2e, NCT6687D_SLEEP_PWR)
 
 void bootblock_mainboard_init(void)
 {
-	mainboard_configure_early_gpios();
+	enum ts_config top_swap = get_rtc_buc_top_swap_status();
+
+	printk(BIOS_INFO, "TOP_SWAP = TS_%sABLE\n", top_swap == TS_ENABLE ? "EN" : "DIS");
+
+	if (top_swap == TS_DISABLE) {
+		configure_rtc_buc_top_swap(TS_ENABLE);
+		do_board_reset();
+	} else {
+		configure_rtc_buc_top_swap(TS_DISABLE);
+	}
+
 }
 
 void bootblock_mainboard_early_init(void)
 {
+	mainboard_configure_early_gpios();
+
 	/* Replicate vendor settings for multi-function pins in global config LDN */
 	nuvoton_pnp_enter_conf_state(SERIAL_DEV);
 	pnp_write_config(SERIAL_DEV, 0x13, 0x0c);
@@ -36,6 +51,6 @@ void bootblock_mainboard_early_init(void)
 	nuvoton_pnp_exit_conf_state(POWER_DEV);
 
 	/* Enable serial */
-	if (CONFIG(CONSOLE_SERIAL))
-		nuvoton_enable_serial(SERIAL_DEV, CONFIG_TTYS0_BASE);
+	//if (CONFIG(CONSOLE_SERIAL))
+	//	nuvoton_enable_serial(SERIAL_DEV, CONFIG_TTYS0_BASE);
 }

@@ -58,7 +58,7 @@ static tpm_result_t tspi_init_crtm(void)
 	}
 
 	/* measure bootblock from RO */
-	if (!CONFIG(ARCH_X86)) {
+	if (CONFIG(ARCH_X86)) {
 		struct region_device bootblock_fmap;
 		if (fmap_locate_area_as_rdev("BOOTBLOCK", &bootblock_fmap) == 0) {
 			rc = tpm_measure_region(&bootblock_fmap,

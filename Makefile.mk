@@ -498,7 +498,7 @@ CFLAGS_common += -Wdangling-else -Wmissing-include-dirs
 CFLAGS_common += -fno-common -ffreestanding -fno-builtin -fomit-frame-pointer
 CFLAGS_common += -fstrict-aliasing -ffunction-sections -fdata-sections -fno-pie
 ifeq ($(CONFIG_COMPILER_GCC),y)
-CFLAGS_common += -Wold-style-declaration
+#CFLAGS_common += -Wold-style-declaration
 # Don't add these GCC specific flags when running scan-build
 ifeq ($(CCC_ANALYZER_OUTPUT_FORMAT),)
 CFLAGS_common += -Wno-packed-not-aligned
@@ -1195,8 +1195,9 @@ ifeq ($(CONFIG_INTEL_ADD_TOP_SWAP_BOOTBLOCK),y)
 TS_OPTIONS := -j $(CONFIG_INTEL_TOP_SWAP_BOOTBLOCK_SIZE)
 endif
 
-ifneq ($(CONFIG_ARCH_X86),y)
-add_bootblock = $(CBFSTOOL) $(1) write -u -r BOOTBLOCK -f $(2)
+ifeq ($(CONFIG_ARCH_X86),y)
+add_bootblock = $(CBFSTOOL) $(1) write -d -r BOOTBLOCK -f $(2) \
+			 && $(CBFSTOOL) $(1) write -d -r TOP_SWAP -f $(2)
 endif
 
 # coreboot.pre doesn't follow the standard Make conventions. It gets modified

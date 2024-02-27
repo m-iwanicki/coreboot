@@ -170,7 +170,7 @@ chip soc/intel/skylake
 				[5]     = 0,
 			}"
 		end
-		device ref uart2 off end # LPSS UART - pins 17, 18 on GXDP header on board underside
+		device ref uart2 on end # LPSS UART - pins 17, 18 on GXDP header on board underside
 		device ref pcie_rp17 on # M.2 2280 / 2242 - SSD
 			register "PcieRpEnable[16]"			= "1"
 			register "PcieRpClkReqSupport[16]"		= "1"
@@ -203,10 +203,11 @@ chip soc/intel/skylake
 			register "serirq_mode" = "SERIRQ_CONTINUOUS"
 			chip superio/nuvoton/nct6687d
 				device pnp 2e.1 off end		# Parallel port
-				device pnp 2e.2 on		# COM1 - optional module
-					io 0x60 = 0x3f8
-					irq 0x70 = 3
-				end
+				device pnp 2e.2 off end		# COM1 - optional module
+				#device pnp 2e.2 on		# COM1 - optional module
+				#	io 0x60 = 0x3f8
+				#	irq 0x70 = 3
+				#end
 				device pnp 2e.3 off end		# COM2, IR
 				device pnp 2e.5 off end		# Keyboard
 				device pnp 2e.6 off end		# CIR
