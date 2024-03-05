@@ -68,6 +68,8 @@ chip soc/intel/alderlake
 			register "gfx" = "GMA_DEFAULT_PANEL(0)"
 		end
 		device ref tbt_pcie_rp0 on end
+		device ref tcss_xdci on end
+		device ref usb_otg on end
 		device ref shared_sram on end
 		device ref cnvi_wifi on
 			register "cnvi_bt_core" = "true"
