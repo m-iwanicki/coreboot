@@ -1424,7 +1424,7 @@ static void cse_set_state(struct device *dev)
 	if (CONFIG(DRIVERS_EFI_VARIABLE_STORE))
 		me_state = efi_me_state;
 	else
-		me_state = cmos_me_state;
+		me_state = cmos_me_state == UINT_MAX ? 0 : cmos_me_state;
 
 	printk(BIOS_DEBUG, "me_state = %u\n", me_state);
 
