@@ -88,6 +88,7 @@ enum {
 	LB_TAG_ACPI_RSDP		= 0x0043,
 	LB_TAG_PCIE			= 0x0044,
 	LB_TAG_LOGO			= 0x00a0,
+	LB_TAG_CAPSULE			= 0x00b0,  /* far from upstream values */
 	/* The following options are CMOS-related */
 	LB_TAG_CMOS_OPTION_TABLE	= 0x00c8,
 	LB_TAG_OPTION			= 0x00c9,
