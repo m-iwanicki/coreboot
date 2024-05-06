@@ -6,3 +6,5 @@ smm-y += options.c
 all-y += options.c
 
 ramstage-y += smbios.c
+
+ramstage-y += uefi_capsules.c

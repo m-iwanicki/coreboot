@@ -20,6 +20,7 @@
 #include <security/memory/memory.h>
 #include <cbmem.h>
 #include <acpi/acpi.h>
+#include <dasharo/uefi_capsules.h>
 
 /* Helper to find free space for memset_pae. */
 static uintptr_t get_free_memory_range(struct memranges *mem,
@@ -59,6 +60,10 @@ static void clear_memory(void *unused)
 
 	if (acpi_is_wakeup_s3())
 		return;
+
+	/* Process capsules before clearing memory and only if not waking up
+	 * from S3. */
+	dasharo_parse_capsules();
 
 	if (!security_clear_dram_request())
 		return;
