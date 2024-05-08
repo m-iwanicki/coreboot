@@ -268,8 +268,8 @@ endif
 ifeq ($(CONFIG_EDK2_DASHARO_NETWORK_BOOT_DEFAULT_ENABLE),y)
 BUILD_STR += --pcd gDasharoSystemFeaturesTokenSpaceGuid.PcdDefaultNetworkBootEnable=TRUE
 endif
+BUILD_STR += --pcd gDasharoSystemFeaturesTokenSpaceGuid.PcdOcWdtEnableDefault=$(CONFIG_EDK2_DASHARO_OC_WDT_SHOW)
 ifeq ($(CONFIG_EDK2_DASHARO_OC_WDT_SHOW),y)
-BUILD_STR += --pcd gDasharoSystemFeaturesTokenSpaceGuid.PcdShowOcWdtOptions=TRUE
 BUILD_STR += --pcd gDasharoSystemFeaturesTokenSpaceGuid.PcdOcWdtTimeoutDefault=$(CONFIG_EDK2_DASHARO_OC_WDT_TIMEOUT)
 ifeq ($(CONFIG_EDK2_DASHARO_OC_WDT_ENABLE),y)
 BUILD_STR += --pcd gDasharoSystemFeaturesTokenSpaceGuid.PcdOcWdtEnableDefault=TRUE
